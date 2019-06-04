@@ -69,13 +69,11 @@ export function convertOxgToOnyx(amount: number, rate: string | null) {
 }
 
 export function convertOxgMax (amount: number, commission: number) {
-  if (+amount === 0) {
-    return false ;
-  } 
-
-  const commissionOxg = new BigNumber(Math.pow(10, 7));
-  let amountOng = new BigNumber(amount).minus(new BigNumber(commissionOxg));
-  amountOng = amountOng.div(new BigNumber(Math.pow(10, 9)));
-  return amountOng.toFixed().toString();
-
+  let amountOXG = new BigNumber(amount);
+  if (amountOXG.c[0] === (new BigNumber(0)).c[0]) {
+    return new BigNumber(0).toString();
+  }
+  amountOXG = amountOXG.div(new BigNumber(Math.pow(10, 9)));
+  amountOXG = amountOXG.minus(new BigNumber(commission));
+  return amountOXG.toFixed();
 }
