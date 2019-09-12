@@ -4,7 +4,7 @@ import * as ReactDOM from "react-dom";
 import "semantic-ui-css/semantic.min.css";
 import "./global.css";
 import { Provider } from "react-redux";
-import { MemoryRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { StatusBar } from "./components";
 import {
   AccountsAddPage,

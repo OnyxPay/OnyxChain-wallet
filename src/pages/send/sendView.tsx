@@ -12,6 +12,8 @@ export interface AssetOption {
 export interface Props {
   ontAmount: number;
   ongAmount: number;
+  recipient: string | null;
+  amount: string | null;
   assetOptions: AssetOption[];
   handleConfirm: (values: object) => Promise<void>;
   handleMax: (formProps: FormRenderProps) => void;
@@ -38,13 +40,13 @@ export const SendView: React.SFC<Props> = props => (
               <label>Recipient</label>
               <Field
                 name="recipient"
-                validate={testBase58Address}
-                render={t => {
+                validate={props.recipient !== null ? required : testBase58Address}
+                render={t => { console.log(t)
                   return (
                     <>
                       <SemanticForm.Input
                         onChange={t.input.onChange}
-                        value={t.input.value}
+                        value={props.recipient !== null ? t.input.value = props.recipient : t.input.value}
                         error={t.meta.touched && t.meta.invalid}
                       />
                       {t.meta.touched && t.meta.invalid && t.input.value && (
@@ -67,8 +69,9 @@ export const SendView: React.SFC<Props> = props => (
                     selection={true}
                     options={props.assetOptions}
                     onChange={(e, data) => t.input.onChange(data.value)}
-                    value={t.input.value}
+                    value={ props.recipient !== null ? t.input.value = "ONYX" : t.input.value}
                     error={t.meta.touched && t.meta.invalid}
+                    disabled={props.recipient !== null}
                   />
                 )}
               />
@@ -100,15 +103,16 @@ export const SendView: React.SFC<Props> = props => (
                         : "1"
                     }
                     onChange={t.input.onChange}
-                    input={{ ...t.input, value: t.input.value }}
+                    input={{ ...t.input, value: props.amount !==null ? props.amount : t.input.value  }}
                     error={t.meta.touched && t.meta.invalid}
-                    disabled={get(formProps.values, "asset") === undefined}
+                    disabled={get(formProps.values, "asset") === undefined || props.amount !== null}
                     action={
                       <Button
                         type="button"
                         className="maxBtn"
                         onClick={() => props.handleMax(formProps)}
                         content="MAX"
+                        disabled={props.recipient !== null}
                       />
                     }
                   />
