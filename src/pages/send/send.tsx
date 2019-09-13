@@ -35,8 +35,8 @@ const enhancer = (Component: React.ComponentType<Props>) => (props: RouterProps)
     const ont = convertOnyxToBigNumber(reduxProps.ontAmount);
     const search = props.history.location.search;
     const params = new URLSearchParams(search);
-    const recipientLocation = params.get('recipient');
-    const amountLocation = params.get('amount');
+    const recipientLocation = params.get('recipient') || '';
+    const amountLocation = params.get('amount') || null;
 
     return withProps(
       {

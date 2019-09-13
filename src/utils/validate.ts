@@ -37,13 +37,16 @@ export function required(value: string) {
   return value === undefined || value.trim().length === 0;
 }
 
-export function range(from: number, to: number) {
+export function range(from: number, to: number ) {
+  console.log(from, to);
   return function rangeCheck(value: string) {
     if (value === undefined) {
       return true;
     }
-
-    const val = Number(value);
+    console.log(2);
+    console.log(from, to);
+    const val = Number(value) ;
+    console.log(val);
     return val <= from || val > to;
   };
 }
