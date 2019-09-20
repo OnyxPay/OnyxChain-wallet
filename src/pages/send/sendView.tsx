@@ -3,7 +3,7 @@ import * as React from "react";
 import { Field, Form, FormRenderProps } from "react-final-form";
 import { Button, Form as SemanticForm } from "semantic-ui-react";
 import { Filler, LogoHeader, Spacer, View } from "../../components";
-import { range, required, testBase58Address } from "../../utils/validate";
+import { range, amountValid, required, testBase58Address } from "../../utils/validate";
 
 export interface AssetOption {
   text: string;
@@ -24,8 +24,7 @@ export interface Props {
  * todo: amount number step does not work for OXG, should be changed to custom validation
  */
 export const SendView: React.SFC<Props> = props => {
-  const {recipient} = props;
-  const {amount} = props;
+  const {recipient, amount, handleConfirm } = props;
 
   return (
   <View orientation="column" fluid={true}>
@@ -37,7 +36,7 @@ export const SendView: React.SFC<Props> = props => {
     </View>
     <View orientation="column" fluid={true} content={true}>
       <Form
-        onSubmit={props.handleConfirm}
+        onSubmit={handleConfirm}
         render={formProps => (
           <SemanticForm onSubmit={formProps.handleSubmit} className="sendForm">
             <View orientation="column">
@@ -52,6 +51,7 @@ export const SendView: React.SFC<Props> = props => {
                         onChange={t.input.onChange}
                         value={recipient ? t.input.value = recipient : t.input.value}
                         error={t.meta.touched && t.meta.invalid}
+                        disabled={recipient !== ""}
                       />
                       {t.meta.touched && t.meta.invalid && t.input.value && (
                         <div className="field-error">{t.meta.error}</div>
@@ -75,7 +75,7 @@ export const SendView: React.SFC<Props> = props => {
                     onChange={(e, data) => t.input.onChange(data.value)}
                     value={recipient ? t.input.value = "ONYX" : t.input.value}
                     error={t.meta.touched && t.meta.invalid}
-
+                    disabled={recipient !== ""}
                   />
                 )}
               />
@@ -85,13 +85,11 @@ export const SendView: React.SFC<Props> = props => {
               <label>Amount</label>
               <Field
                 name="amount"
-                value={amount}
-                validate={amount ? range(0,  props.ontAmount) : range(
+                validate={amount ? amountValid(amount,  props.ontAmount) : range(
                   0,
                   get(formProps.values, "asset") === "OXG" ? props.ongAmount : props.ontAmount
                 )}
                 render={t => {
-                  console.log(t);
                   return (
                   <SemanticForm.Input
                     type="number"
@@ -110,7 +108,7 @@ export const SendView: React.SFC<Props> = props => {
                         : "1"
                     }
                     onChange={t.input.onChange}
-                    input={{ ...t.input, value: amount ? t.input.value = amount : t.input.value  }}
+                    input={{ ...t.input, value: amount ? amount : t.input.value  }}
                     error={t.meta.touched && t.meta.invalid}
                     action={
                       <Button
@@ -128,7 +126,7 @@ export const SendView: React.SFC<Props> = props => {
             <Filler />
             <View className="buttons">
               <Button onClick={props.handleCancel}>Cancel</Button>
-              <Button icon="check" type="submit" content="Confirm" />
+              <Button icon="check" content="Confirm" />
             </View>
           </SemanticForm>
         )}

@@ -1,5 +1,6 @@
 import { get } from "lodash";
 import { utils, Crypto } from "ontology-ts-sdk";
+import {convertAmountToStr} from "../utils/number";
 
 export function validMnemonics(value: string) {
   try {
@@ -38,17 +39,22 @@ export function required(value: string) {
 }
 
 export function range(from: number, to: number ) {
-  console.log(from, to);
   return function rangeCheck(value: string) {
     if (value === undefined) {
       return true;
     }
-    console.log(2);
-    console.log(from, to);
     const val = Number(value) ;
-    console.log(val);
     return val <= from || val > to;
   };
+}
+
+export function amountValid(value: string, amount: number ) {
+    const val = convertAmountToStr(value, "ONYX");
+    const am = convertAmountToStr(amount, "ONYX");
+    return function amountValidCheck() {
+      return val <= am;
+
+    }
 }
 
 export function tokenValid(value: string) {
