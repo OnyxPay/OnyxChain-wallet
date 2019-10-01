@@ -5,6 +5,7 @@ import { getWallet } from "./authApi";
 import Address = Crypto.Address;
 import { getClient } from "../network";
 import { getAccount, decryptAccount } from "./accountApi";
+import { getOptions } from "../api/constants";
 
 export async function getBalance(walletEncoded: any) {
   const wallet = getWallet(walletEncoded);
@@ -26,19 +27,24 @@ export async function getBalance(walletEncoded: any) {
   fix getUnboundong in wsProvider
   use Ws
 */
-export async function getUnboundOxg(nodeAddress: string, ssl: boolean, walletEncoded: any) {
-  const wallet = getWallet(walletEncoded);
+export async function getUnboundOxg( walletEncoded: any) {
+	const wallet = getWallet(walletEncoded);
   const address = getAccount(wallet).address;
-  const protocol = ssl ? "https" : "http";
-  const baseUrl = `${protocol}://${nodeAddress}:${CONST.HTTP_REST_PORT}`;
-  const unboundOngUrl = "/api/v1/unboundoxg/";
+  const unboundOngUrl = `/addresses/${address.toBase58()}/balances`;
+  const options = getOptions();
+  const endpoint = options.blockExplorer.address;
 
-  const url = baseUrl + unboundOngUrl + address.toBase58();
-  const response = await axios.get(url).then(res => {
+  const url = endpoint + unboundOngUrl;
+  const response = await axios.get(url, { params: { asset_name: 'oxg' } }).then(res => {
     return res.data;
   });
 
-  const unboundOng: number = Number(get(response, "Result"));
+  let unboundOng: any;
+  response.result.map(item => {
+    if(item.asset_name === "unboundoxg"){
+      unboundOng = Number(item.balance);
+    }
+  })
   return unboundOng;
 }
 

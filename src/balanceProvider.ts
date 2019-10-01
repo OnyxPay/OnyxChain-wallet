@@ -11,9 +11,8 @@ export async function refreshBalance(store: GlobalStore) {
 
   if (walletEncoded !== null) {
     try {
-      const settings = state.settings;
       const balance = await getBalance(walletEncoded);
-      const unboundOng = await getUnboundOxg(settings.nodeAddress, settings.ssl, walletEncoded);
+      const unboundOng = await getUnboundOxg(walletEncoded);
 
       const tokenBalances: TokenAmountState[] = [];
 

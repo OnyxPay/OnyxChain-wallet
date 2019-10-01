@@ -34,7 +34,7 @@ export const propdOpts = {
     address: "https://ico.onyxcoin.io/api/v1"
   },
   blockExplorer: {
-    address: "https://andromeda-explorer.onyxpay.co/api/v1"
+    address: "http://10.200.1.14:8090/v2"
   }
 };
 
