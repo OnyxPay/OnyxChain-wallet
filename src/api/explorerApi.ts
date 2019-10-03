@@ -32,17 +32,17 @@ export async function getTransferList(address: string) {
 }
 
 function translateAmount(amount: any, asset: any): AmountType  {
-  if (asset === "ont") {
+  if (asset === "onyx") {
     return decodeAmount(amount, 8);
-  } else if (asset === "ong") {
+  } else if (asset === "oxg") {
     return decodeAmount(amount, 0);
   } 
 }
 
 function translateAsset(asset: any): AssetType {
-  if (asset === "ont") {
+  if (asset === "onyx") {
     return "ONYX";
-  } else if (asset === "ong") {
+  } else if (asset === "oxg") {
     return "OXG";
   } else {
     return "ONYX";
