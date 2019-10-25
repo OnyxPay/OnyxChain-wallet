@@ -1,20 +1,10 @@
 version: '3'
 services:
-    wallet:
-        image: wallet_src:${tag}
-        build: 
-            context: ..
-            dockerfile: deploy/Dockerfile
-        deploy:
-            replicas: 0
-        volumes:
-            - /src
-
     nginx:
         image: 866680356172.dkr.ecr.us-east-2.amazonaws.com/wallet:${tag}
-        build: 
-            context: .
-            dockerfile: nginx/Dockerfile
+        build:
+            context: ..
+            dockerfile: deploy/nginx/Dockerfile
             args:
                 tag: ${tag}
         ports:
@@ -22,6 +12,3 @@ services:
             - "443:443"
         volumes:
             - /etc/letsencrypt/:/etc/letsencrypt/
-        links:
-            - wallet
-
