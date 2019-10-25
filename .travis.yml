@@ -8,7 +8,7 @@ branches:
   - prod
   - preprod
 
-before_script: 
+before_script:
 - cd deploy
 - echo $TRAVIS_COMMIT
 - echo $TRAVIS_TAG
@@ -16,11 +16,11 @@ before_script:
 - echo $TRAVIS_BUILD
 
 script:
-  if [ -z $TRAVIS_TAG ]; then TRAVIS_TAG=dev;  fi; tag=$TRAVIS_TAG docker-compose build
+  if [ -z $TRAVIS_TAG ]; then TRAVIS_TAG=dev; fi && docker build --build-arg tag=${TRAVIS_TAG} -t 866680356172.dkr.ecr.us-east-2.amazonaws.com/wallet:${TRAVIS_TAG} -f deploy/nginx/Dockerfile .
 
 deploy:
 - provider: script
   script: bash aws/deploy.sh $TRAVIS_TAG
   on:
-    tags: true 
+    tags: true
     condition: $TRAVIS_TAG =~ ^prod|preprod$
