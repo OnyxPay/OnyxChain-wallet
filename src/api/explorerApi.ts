@@ -20,7 +20,7 @@ export async function getTransferList(address: string) {
 
       return transferList.map(transfer => {
         return {
-          amount: translateAmount((get(transfer, "amount")), (get(transfer, "asset_name"))),
+          amount: translateAmount((get(transfer, "amount"))),
           asset: translateAsset(get(transfer, "asset_name")),
           from: get(transfer, "from_address"),
           time: txnTime,
@@ -31,12 +31,8 @@ export async function getTransferList(address: string) {
   );
 }
 
-function translateAmount(amount: any, asset: any): AmountType  {
-  if (asset === "onyx") {
-    return decodeAmount(amount, 8);
-  } else if (asset === "oxg") {
-    return decodeAmount(amount, 0);
-  } 
+function translateAmount(amount: any): AmountType  {
+  return decodeAmount(amount, 0);
 }
 
 function translateAsset(asset: any): AssetType {
