@@ -1,6 +1,6 @@
 import axios from "axios";
 import { flatMap, get } from "lodash";
-import { AssetType, Transfer, AmountType } from "../redux/runtime";
+import { AssetType, Transfer } from "../redux/runtime";
 import { decodeAmount } from "src/utils/number";
 import { getOptions } from "../api/constants";
 
@@ -20,7 +20,7 @@ export async function getTransferList(address: string) {
 
       return transferList.map(transfer => {
         return {
-          amount: translateAmount((get(transfer, "amount")), (get(transfer, "asset_name"))),
+          amount: decodeAmount(get(transfer, "amount"), 0),
           asset: translateAsset(get(transfer, "asset_name")),
           from: get(transfer, "from_address"),
           time: txnTime,
@@ -29,14 +29,6 @@ export async function getTransferList(address: string) {
       });
     })
   );
-}
-
-function translateAmount(amount: any, asset: any): AmountType  {
-  if (asset === "onyx") {
-    return decodeAmount(amount, 8);
-  } else if (asset === "oxg") {
-    return decodeAmount(amount, 0);
-  } 
 }
 
 function translateAsset(asset: any): AssetType {
