@@ -58,12 +58,10 @@ const enhancer = (Component: React.ComponentType<Props>) => (props: RouteCompone
                 transferToken(reduxProps.wallet, password, recipient, asset, amount),
                 15000
               );
-              const tokenDecimals = reduxProps.tokens.find(t => t.symbol === asset);
               props.history.push("/sendComplete", {
                 recipient,
                 asset,
                 amount,
-                decimals: tokenDecimals && tokenDecimals.decimals
               });
             }
           } catch (e) {
