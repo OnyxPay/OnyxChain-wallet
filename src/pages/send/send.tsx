@@ -33,6 +33,10 @@ const enhancer = (Component: React.ComponentType<Props>) => (props: RouterProps)
     ];
     const ong = convertOxgMax(reduxProps.ongAmount, 0.01);
     const ont = convertOnyxToBigNumber(reduxProps.ontAmount);
+    const search = props.history.location.search;
+    const params = new URLSearchParams(search);
+    const recipientLocation = params.get('recipient') || '';
+    const amountLocation = params.get('amount') || null;
 
     return withProps(
       {
@@ -41,6 +45,7 @@ const enhancer = (Component: React.ComponentType<Props>) => (props: RouterProps)
           props.history.goBack();
         },
         handleConfirm: async (values: object) => {
+          console.log(values);
           const recipient = get(values, "recipient", "");
           const asset = get(values, "asset", "");
           const amountStr = get(values, "amount", "0");
@@ -74,6 +79,8 @@ const enhancer = (Component: React.ComponentType<Props>) => (props: RouterProps)
           {...injectedProps}
           ontAmount={ont}
           ongAmount={ong}
+          recipient={recipientLocation}
+          amount={amountLocation}
         />
       )
     );
